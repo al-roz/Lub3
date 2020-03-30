@@ -1,0 +1,2 @@
+
+void FileChek(FILE* f);

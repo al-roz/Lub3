@@ -138,6 +138,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\lab3\lab3\Cheker.c" />
+    <ClCompile Include="..\..\lab3\lab3\Str.c" />
+    <ClCompile Include="main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lab3\lab3\Cheker.h" />
+    <ClInclude Include="..\..\lab3\lab3\Str.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
