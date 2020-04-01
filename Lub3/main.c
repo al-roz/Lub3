@@ -14,6 +14,18 @@ typedef struct
 
 } BigInt;
 
+int Max(int a, int b)
+{
+	if (a >= b)
+	{
+		return a;
+	}
+	else
+	{
+		return b;
+	}
+}
+
 int SizeNumber(FILE* f)
 {
 	int ans = 0;
@@ -59,6 +71,145 @@ void ReadNumber(BigInt* x, FILE* f)
 
 }
 
+void ChangeDischargeForSum(BigInt* x)
+{
+	for (int i = x->size; i > 0; i--)
+	{
+		if (x->number[i] >= 10)
+		{
+			x->number[i - 1] += x->number[i] / 10;
+			x->number[i] %= 10;
+		}
+	}
+}
+
+void ChangeDischargForSubtraction(BigInt* x)
+{
+	if (x->number[0] > 0)
+	{
+		for (int i = x->size; i > 1; i--)
+		{
+			if (x->number[i - 1] < 0)
+			{
+				x->number[i - 1] += 10;
+				x->number[i - 2] -= 1;
+			}
+		}
+	}
+	//else
+	//{
+	//	for (int i = 0; i < x->size; i++)
+	//		x->number[i] = abs(x->number[i]);
+	//	ChangeDischargForSubtraction(x);
+	//	x->number[0] *= -1;
+	//}
+}
+
+
+void Addition(BigInt x, BigInt y)
+{
+	int copsizex = x.size;
+	int copsizey = y.size;
+	int size = Max(copsizex, copsizey);
+	BigInt b;
+	b.size = size + 1;
+	b.number = (int*)malloc(b.size * sizeof(int));
+	for (int i = 0; i < b.size; i++)
+		b.number[i] = 0;
+	int copsizeb = b.size;
+
+
+	for (int i = copsizex; i > 0; i--)
+	{
+		b.number[copsizeb - 1] += x.number[i - 1];
+		copsizeb--;
+	}
+	copsizeb = b.size;
+
+	for (int i = copsizey; i > 0; i--)
+	{
+		b.number[copsizeb - 1] += y.number[i - 1];
+		copsizeb--;
+	}
+	copsizeb = b.size;
+
+	ChangeDischargeForSum(&b);
+	for (int i = 1; i < b.size; i++)
+	{
+		printf("%d", b.number[i]);
+	}
+}
+
+void Subtraction(BigInt x, BigInt y)
+{
+	BigInt b;
+	int copsizex = x.size;
+	int copsizey = y.size;
+	int size = Max(copsizex, copsizey);
+	int flag = 0;
+
+	if (copsizex < copsizey)
+	{
+		BigInt temp = x;
+		x = y;
+		y = temp;
+		flag = 1;
+	}
+	copsizex = x.size;
+	copsizey = y.size;
+
+	if (copsizex == copsizey)
+	{
+		for (int i = 0; i < copsizex; i++)
+			if (x.number[i] == y.number[i])
+			{
+				size--;
+			}
+			else
+			{
+				break;
+			}
+	}
+	if (size == 0)
+	{
+		printf("0");
+		return;
+	};
+
+	b.size = size;
+	int copsizeb = b.size;
+
+	b.number = (int*)malloc(b.size * sizeof(int));
+	for (int i = 0; i < b.size; i++)
+		b.number[i] = 0;
+
+	for (int i = copsizex; i > 0; i--)
+	{
+		b.number[copsizeb - 1] += x.number[i - 1];
+		copsizeb--;
+		if (copsizeb == -1)break;
+	}
+	copsizeb = b.size;
+
+	for (int i = copsizey; i > 0; i--)
+	{
+		b.number[copsizeb - 1] -= y.number[i - 1];
+		copsizeb--;
+		if (copsizeb == -1)break;
+	}
+
+	ChangeDischargForSubtraction(&b);
+	if (flag == 1) b.number[0] *= -1;
+	for (int i = 0; i < b.size; i++)
+	{
+		if (b.number[i] < 0 && i != 0) b.number[i] *= -1;
+		printf("%d", b.number[i]);
+	}
+
+}
+
+
+
 
 	int main()
 	{
@@ -69,6 +220,8 @@ void ReadNumber(BigInt* x, FILE* f)
 		FileChek(f1);
 		FileChek(f2);
 		BigInt x, y;
+		x.sign = 0;
+		y.sign = 0;
 		ReadNumber(&x, f1);
 		ReadNumber(&y, f2);
 
@@ -83,11 +236,30 @@ void ReadNumber(BigInt* x, FILE* f)
 		{
 			printf("%d", y.number[i]);
 		}
+		printf("\n");
 
-
-	//	Addition(x, y);
-	//	printf("\n");
+		//Addition(x, y);
+		//printf("\n");
 		//Subtraction(x, y);
+
+		if (x.sign == 0 && y.sign == 0)
+		{
+			Addition(x, y);
+			printf("\n");
+			Subtraction(x, y);
+		}
+
+		if (x.sign == 0 && y.sign == 1)
+		{
+			Subtraction(x, y);
+			printf("\n");
+			Addition(x, y);
+		}
+
+		if (x.sign == 1 && y.sign == 0)
+		{
+
+		}
 
 
 		//Multiplication(x, y);
