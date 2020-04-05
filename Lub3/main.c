@@ -105,6 +105,23 @@ void ChangeDischargForSubtraction(BigInt* x)
 	//}
 }
 
+// return 0 == x > y 
+// return 1 == x < y
+int comparison(BigInt* x, BigInt* y)
+{
+	if (x->size > y->size) return 0;
+	if (x->size < y->size) return 1;
+	if (x->size == y->size)
+	{
+		for (int i = 0; i < x->size; i++)
+		{
+			if (x->number[i] > y->number[i]) return 0;
+			if (x->number[i] < y->number[i]) return 1;
+			
+		}
+	}
+	return 0;
+}
 
 void Addition(BigInt x, BigInt y)
 {
@@ -225,6 +242,7 @@ void Subtraction(BigInt x, BigInt y)
 		ReadNumber(&x, f1);
 		ReadNumber(&y, f2);
 
+
 		if (x.sign == 1)printf("-");
 		for (int i = 0; i < x.size; i++)
 		{
@@ -238,9 +256,8 @@ void Subtraction(BigInt x, BigInt y)
 		}
 		printf("\n");
 
-		//Addition(x, y);
-		//printf("\n");
-		//Subtraction(x, y);
+
+		//printf("%d\n", comparison(&x, &y));
 
 		if (x.sign == 0 && y.sign == 0)
 		{
@@ -258,7 +275,28 @@ void Subtraction(BigInt x, BigInt y)
 
 		if (x.sign == 1 && y.sign == 0)
 		{
+			int t;
+			t = comparison(&x, &y);
+			if (t == 0)
+			{
+				printf("-");
+				Subtraction(x, y);
+				printf("\n-");
+				Addition(x, y);
 
+			}
+		}
+
+		if (x.sign == 1 && y.sign == 1)
+		{
+			int t = comparison(&x, &y);
+			if (t == 0)
+			{
+				printf("-");
+				Addition(x, y);
+				printf("\n-");
+				Subtraction(x, y);
+			}
 		}
 
 
