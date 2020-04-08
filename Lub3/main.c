@@ -225,7 +225,35 @@ void Subtraction(BigInt x, BigInt y)
 
 }
 
+void Multiplication(BigInt x, BigInt y)
+{
+	int size = x.size + y.size ;
+	BigInt b;
+	b.size = size;
+	b.number = (int*)malloc(b.size * sizeof(int));
+	for (int i = 0; i < b.size; i++)
+		b.number[i] = 0;
 
+	int raz = 0;
+	
+	for (int i = y.size - 1; i >= 0; i--)
+	{
+		int raz1 = 0;
+		for (int j = x.size - 1; j >= 0; j--)
+		{			
+			raz1++;
+			b.number[b.size - raz - raz1] += x.number[j] * y.number[i];
+		}
+
+		raz++;
+	}
+	ChangeDischargeForSum(&b);
+	for (int i = 0; i < b.size; i++)
+	{
+		printf("%d ", b.number[i]);
+	}
+	
+}
 
 
 	int main()
@@ -264,6 +292,8 @@ void Subtraction(BigInt x, BigInt y)
 			Addition(x, y);
 			printf("\n");
 			Subtraction(x, y);
+			printf("\n");
+			Multiplication(x, y);
 		}
 
 		if (x.sign == 0 && y.sign == 1)
@@ -300,7 +330,7 @@ void Subtraction(BigInt x, BigInt y)
 		}
 
 
-		//Multiplication(x, y);
+		//
 		//Division(x, y);
 		system("pause");
 
